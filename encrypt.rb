@@ -1,22 +1,27 @@
 # Программа для шифрования слова с помощью механизма MD5 или SHA1
 require "digest"
 
+METHODS = [:MD5, :SHA1, :SHA2]
+
 puts "Введите слово или фразу для шифрования:"
 string = STDIN.gets.chomp
 
-puts "Каким способом зашифровать:"
-puts "1. MD5"
-puts "2. SHA1"
-encrypt_method = STDIN.gets.to_i
+puts "\nКаким способом зашифровать:"
+METHODS.each_with_index { |method, index| puts "#{index + 1}. #{method}" }
 
-until encrypt_method.between?(1, 2)
-  puts "Выберите 1 или 2"
-  encrypt_method = STDIN.gets.to_i
+chosen_index = STDIN.gets.to_i - 1
+
+until chosen_index.between?(0, METHODS.size - 1)
+  puts "Введите 1, 2 или 3"
+  chosen_index = STDIN.gets.to_i - 1
 end
 
-puts "Вот что получилось:"
+chosen_method = METHODS[chosen_index]
 
-case encrypt_method
-when 1 then puts Digest::MD5.hexdigest(string)
-when 2 then puts Digest::SHA1.hexdigest(string)
+puts "\nВот что получилось:"
+
+case chosen_method
+when :MD5 then puts Digest::MD5.hexdigest(string)
+when :SHA1 then puts Digest::SHA1.hexdigest(string)
+when :SHA2 then puts Digest::SHA2.hexdigest(string)
 end
